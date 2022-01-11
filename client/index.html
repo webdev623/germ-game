@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Eat cells smaller than you and don't get eaten by the bigger ones, as an MMO">
+	<meta name="keywords" content="agario, agar, io, cell, cells, virus, bacteria, blob, game, games, web game, html5, fun, flash">
+	<meta name="robots" content="index, follow">
+	<meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<title>Cigar2</title>
+
+
+	<link id="favicon" rel="icon" type="image/png" href="assets/img/favicon.png">
+	<link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet" type="text/css">
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+	<link href="assets/css/index.css" rel="stylesheet">
+	<link href="assets/css/gallery.css" rel="stylesheet">
+	<link href="assets/css/add.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+	<script src="assets/js/quadtree.js"></script>
+	<script src="assets/js/main_out.js"></script>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+
+	<script type="text/javascript" src="assets/js/party_join.js"></script>
+	<script type="text/javascript">
+		var is_createparty = 0;//create/leave
+
+		$(document).ready(function () {
+			$("#i_createparty").click(function () {
+				is_createparty = 1;
+				$("#contextMenu_1").hide();
+				$("#partytable").show();
+				$("#partytable").html("Party Member");
+				window.CreateParty();
+				//$("#partytable").append("<div><strong>" + $("#nick").val() + "</strong> has joined</div>");
+			});
+
+			$("#i_leaveparty").click(function () {
+				is_createparty = 0;
+				$("#contextMenu_2").hide();
+				$("#partytable").hide();
+				window.LeaveParty();
+			});
+
+			$("#i_leaveparty3").click(function () {
+				is_createparty = 0;
+				$("#contextMenu_3").hide();
+				$("#partytable").hide();
+				//$("#partytable").html("PartyMember");
+				window.LeaveParty();
+			});
+
+			$("#i_leaveparty4").click(function () {
+				is_createparty = 0;
+				$("#contextMenu_4").hide();
+				$("#partytable").hide();
+				//$("#partytable").html("PartyMember");
+				window.LeaveParty();
+			});
+
+			$("#i_inviteparty_mute").click(function () {
+				is_createparty = 1;
+				$("#contextMenu_3").hide();
+				window.invite();
+			});
+			
+			$(document).bind("contextmenu", function (e) {
+				e.preventDefault();
+		 	    window.clickcontextmenu();
+			});
+		});
+
+
+		$(document).ready(function () {
+
+			$("#circle").bind("contextmenu", function () {
+				alert("invite message");
+			});
+
+			//  hide context_menu when mouse left click
+			$(document).bind("click", function () {
+				$(".context-menu").finish().toggle(false);
+				$(".context-menu2").finish().toggle(false);
+				$(".context-menu3").finish().toggle(false);
+				$(".context-menu4").finish().toggle(false);
+			});
+		});
+
+
+					  //  if (document.addEventListener) {
+					  //      document.addEventListener('contextmenu', function(e) {
+					  //          e.preventDefault();
+					  //
+					  //      }, false);
+					  //  }
+
+</script>
+</head>
+
+<body>
+	<div id="gallery" onclick="if (event.target == this) this.hide()" style="display: none;">
+		<div id="gallery-content">
+			<div id="gallery-header">Skins</div>
+			<div id="gallery-body"></div>
+		</div>
+	</div>
+	<div id="overlays" style="display: none;">
+		<div id="helloDialog">
+			<div class="form-group">
+				<h2 id="title">Cigar2</h2>
+			</div>
+			<div class="form-group">
+				<input id="nick" class="form-control" placeholder="Nickname" maxlength="15">
+				<input id="skin" class="form-control" placeholder="Skin Name">
+				<select id="gamemode" class="form-control" onchange="setserver(this.value)" required>
+					<option value="192.168.100.14:10014" selected>Local</option>
+					<!--option value="127.0.0.1:10015" selected>Local</option-->
+				</select>
+			</div>
+
+			<button id="play-btn" class="btn btn-play btn-primary btn-needs-server">Play</button>
+			<button id="spectate-btn" onclick="spectate()" class="btn btn-warning btn-spectate btn-needs-server glyphicon glyphicon-eye-open"></button>
+			<button id="gallery-btn" onclick="openSkinsList()" class="btn btn-play btn-primary btn-needs-server btn-info">Skins Gallery</button>
+			<div id="settings" class="checkbox">
+				<div style="margin: 6px;">
+					<label><input id="showSkins" type="checkbox">Skins</label>
+					<label><input id="showNames" type="checkbox">Names</label>
+					<label><input id="darkTheme" type="checkbox">Dark</label>
+					<label><input id="showColor" type="checkbox">Color</label>
+					<label><input id="showMass" type="checkbox">Mass</label>
+					<label><input id="showChat" type="checkbox">Chat</label>
+					<label><input id="showMinimap" type="checkbox">Minimap</label>
+					<label><input id="showPosition" type="checkbox">Position</label>
+					<label><input id="showBorder" type="checkbox">Border</label>
+					<label><input id="showGrid" type="checkbox">Grid</label>
+					<label><input id="moreZoom" type="checkbox">Zoomout</label>
+					<label><input id="fillSkin" type="checkbox">Fill Skin</label>
+					<label><input id="backgroundSectors" type="checkbox">Background Sectors</label>
+					<label><input id="jellyPhysics" type="checkbox">Jelly Physics</label>
+					<label>
+						<input id="playSounds" type="checkbox">Sounds
+						<input id="soundsVolume" type="range" min="0" max="1" step="any">
+					</label>
+				</div>
+			</div>
+			<hr>
+			<div class="form-group" id="partySetting" style="padding:10px 0 10px 0;">
+				<div id="partyFind" style="display">
+					<h4 class="partyTitle">
+						<span>
+							<i class="fas fa-user-friends"></i><b>Party</b><br>
+						</span>
+					</h4>
+					<div class="partyText">	Play with your friends</div>
+					<div class="clear">
+						<button class="btn btn-primary btn-party party-create" id="btn_partyCreate">Create </button>
+						<button class="btn btn-success btn-party party-join" id="btn_partyJoin">Join</button>
+					</div>
+				</div>
+				<div id="partyMenu" style="">
+					<i class="fas fa-sign-out-alt partyExit" onclick="exitParty(); return false;"></i>
+					<h4 class="partyTitle">
+						<span>
+							<i class="fas fa-user-friends"></i><b>Party</b><br>
+						</span>
+					</h4>
+					<div class="partyText">Share the code to your friends!</div>
+					<div class="clear">
+						<div class="input-group">
+							<input id="partyCode" type="hidden" value="" class="form-control" readonly="readonly" onclick="$(this).select();">
+							<input id="partyCode_URL" type="text" value="" class="form-control" readonly="readonly" onclick="$(this).select();">
+							<div class="input-group-btn">
+								<button class="btn btn-primary btn-party party-copy" onclick="copyToClipboard(document.getElementById('partyCode_URL')); $('#partyCode_URL').select();">Copy</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="partyJoin" style="">
+					<i class="fas fa-sign-out-alt partyExit" onclick="exitParty(); return false;"></i>
+					<h4 class="partyTitle">
+						<span>
+							<i class="fas fa-user-friends"></i><b>Party</b><br>
+						</span>
+					</h4>
+					<div class="partyText">Enter the code from your friends!</div>
+					<div class="clear">
+						<div class="input-group">
+							<input id="partyJoinCode" type="hidden" value="" class="form-control" onclick="$(this).select();">
+							<input id="partyJoinCode_URL" type="text" value="" class="form-control" onclick="$(this).select();">
+							<div class="input-group-btn">
+								<button class="btn btn-success btn-party party-copy" id="btn_joinCode">Join</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="instructions">
+				<hr>
+				<center>
+					<span class="text-muted">
+						Move your mouse to control your cell<br>
+						Press <b>Space</b> to split<br>
+						Press <b>W</b> to eject some mass<br>
+					</span>
+				</center>
+			</div>
+			<hr>
+			<div id="footer">
+				<span class="text-muted">Have a fun!</span>
+			</div>
+
+		</div>
+	</div>
+
+	<div id="connecting">
+		<div id="connecting-content">
+			<h2>Connecting</h2>
+			<p> If you cannot connect to the servers, check if you have some anti virus or firewall blocking the connection.</p>
+		</div>
+	</div>
+	<div id="mobileStuff" style="display: none;">
+		<div id="touchpad"></div>
+		<div id="touchCircle" style="display: none;"></div>
+		<img src="/assets/img/split.png" id="splitBtn">
+		<img src="/assets/img/eject.png" id="ejectBtn">
+	</div>
+	<canvas id="canvas_jyb" width="800" height="600"></canvas>
+
+	<div class="container" id="i_container">
+		<div id="i_chat_box"></div>
+		<input type="text" id="chat_textbox" placeholder="Press enter to chat" maxlength="200" data-emoji-picker="true">
+		<a id="i_emoticon"></a>
+	</div>
+    
+	<canvas id="partytable"></canvas>
+	<!--div id="partytable">
+		<div class="party_title">Party Member</div>
+	</div-->
+
+
+	<div id="contextMenu_1" class="context-menu">
+		<ul>
+			<li id="i_createparty"><i class="fas fa-plus-circle"></i> Creat Party</li>
+			<strong><li id="screenshot"><i class="fas fa-camera"></i> Screenshot</li></strong>
+		</ul>
+	</div>
+	<div id="contextMenu_2" class="context-menu2">
+		<ul>
+			<li id="i_leaveparty"><i class="fas fa-arrow-right"></i> Leave Party</li>
+			<strong><li id="screenshot"><i class="fas fa-camera"></i> Screenshot</li></strong>
+		</ul>
+	</div>
+	<div id="contextMenu_3" class="context-menu3">
+		<ul>
+			<li id="i_inviteparty_mute"><i class="fas fa-users"></i> Invite to Party</li>
+			<li id="i_muteplayer" onclick="mute()"><i class="fas fa-volume-mute"></i> Mute Player</li>
+			<li id="i_leaveparty3"><i class="fas fas fa-sign-out-alt"></i> Leave Party</li>
+			<strong><li id="screenshot"><i class="fas fa-camera"></i> Screenshot</li></strong>
+		</ul>
+	</div>
+	<div id="contextMenu_4" class="context-menu4">
+		<ul>
+			<li id="i_inviteparty_mute"><i class="fas fa-users"></i> Invite to Party</li>
+			<li id="i_unmuteplayer" onclick="unmute()"><i class="fas fa-volume-mute"></i> UnMute Player</li>
+			<li id="i_leaveparty4"><i class="fas fa-sign-out-alt"></i> Leave Party</li>
+			<strong><li id="screenshot"><i class="fas fa-camera"></i> Screenshot</li></strong>
+		</ul>
+	</div>
+	<a id="target" style="display: none"></a>
+
+	<div id="i_confirm">
+		<div id="i_confirm_title">Party Invitation:</div>
+		<div id="i_confirm_text"></div>
+		<div id="i_confirm_button">
+			<button class="btn btn-success" onclick="accept()" id="i_accept">Accept</button>
+			<button class="btn btn-danger" id="i_decline" onclick="decline()">Decline</button>
+		</div>
+	</div>
+
+	<canvas id="i_experimental">Experimental</canvas>
+	<canvas id="i_stats">
+		<!--canvas id="i_mass"><b>Mass :</b></canvas>
+		<canvas id="i_score"><b>Score :</b></canvas>
+		<canvas id="i_fps"><b>FPS :</b></canvas>
+		<canvas id="i_ping"><b>PING :</b></canvas-->
+	</canvas>
+
+	<!--div id="leaderboard">
+		<div class="leaderboard_title">Leaderboard</div>
+	</div-->
+	
+
+
+	<script src="assets/js/src/emojiPicker.js"></script>
+	<script>
+		(() => {
+		new EmojiPicker()
+		})()
+	</script>
+	
+	<script>
+		$("strong").on('click', function (e) {
+
+			var height = window.innerHeight;
+
+			var width = $(document).width();
+
+			var $mask = $('<div id="screenshot_mask"></div>').css("border-width", "0 0 " + height + "px 0");
+
+			var $focus = $('<div id="screenshot_focus"></div>');
+
+			$("body").append($mask);
+
+			$("body").append($focus);
+
+
+			var selectArea = false;
+
+			$("body").one("mousedown", function (e) {
+
+				e.preventDefault();
+
+				selectArea = true;
+
+				startX = e.clientX;
+
+				startY = e.clientY;
+
+			}).one('mouseup', function (e) {
+
+				selectArea = false;
+
+
+				$("body").off('mousemove', mousemove);
+
+				$("#screenshot_focus").remove();
+
+				$("#screenshot_mask").remove();
+
+
+				var x = e.clientX;
+
+				var y = e.clientY;
+
+				var top = Math.min(y, startY);
+
+				var left = Math.min(x, startX);
+
+				var width = Math.max(x, startX) - left;
+
+				var height = Math.max(y, startY) - top;
+
+
+				html2canvas(document.body).then(function (canvas) {
+
+					var img = canvas.getContext('2d').getImageData(left, top, width, height);
+
+					var c = document.createElement("canvas");
+
+					c.width = width;
+
+					c.height = height;
+
+					c.getContext('2d').putImageData(img, 0, 0);
+
+					save(c);  //save crop image
+
+				});
+
+			}).on("mousemove", mousemove);  //change the size of capture
+
+
+			function mousemove(e) {
+
+				var x = e.clientX;
+
+				var y = e.clientY;
+
+				$focus.css("left", x);  //move mouse cursor
+
+				$focus.css("top", y);
+
+
+				if (selectArea) {  //capture choose
+
+					var top = Math.min(y, startY);
+
+					var right = width - Math.max(x, startX);
+
+					var bottom = height - Math.max(y, startY);
+
+					var left = Math.min(x, startX);
+
+					$mask.css("border-width", [top + 'px', right + 'px', bottom + 'px', left + 'px'].join(' '));
+
+				}
+
+			}
+
+
+			function save(canvas) {  //save file
+
+
+				var el = document.getElementById("target");
+
+				el.href = canvas.toDataURL("image/jpeg");
+
+				el.download = 'screenshot.jpg';
+
+				el.click();
+
+
+			}
+
+		});
+	</script>
+</body>
+</html>

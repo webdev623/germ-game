@@ -1,0 +1,591 @@
+html, body {
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: none;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+}
+input[type=checkbox] {
+    cursor: pointer;
+}
+
+#overlays, #connecting {
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 200;
+}
+#connecting {
+    z-index: 100;
+}
+#connecting-content {
+    width: 350px;
+    background-color: #fff;
+    margin: 100px auto;
+    border-radius: 15px;
+    padding: 5px 15px;
+}
+#title {
+    padding: 10px;
+}
+#nick {
+    width: 65%;
+}
+#skin {
+    width: 33%;
+    float: right;
+}
+#nick, #skin {
+    display: inline;
+}
+#gamemode {
+    margin-top: 5px;
+    width: 100%;
+}
+#helloDialog {
+    width: 400px;
+    background-color: #fff;
+    margin: 10px auto;
+    border-radius: 15px;
+    padding: 5px 15px 5px 15px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#chat_textbox:focus {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+
+#i_chat_box {
+	position: absolute;
+	left: 0;
+	bottom: 30px;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	display: block;
+	height: 180px;
+	width: 280px;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+	background: rgba(0,0,0,0.7);
+	overflow-y: auto;
+	overflow-x: auto;
+	font-size:13px;
+    padding:5px;
+}
+
+#i_chat_box span{
+  font-size: 13px;
+  display:block;
+  color:#fff;
+}
+
+#chat_textbox {
+	transition-property: background;
+	transition-duration: 0.5s;
+	transition-timing-function: ease-in-out;
+	transition-delay: 0s;
+	position: absolute;
+	z-index: 4;
+	bottom: 0;
+	background: rgba(0, 0, 0, .7);
+	border-top-color: initial;
+	border-top-style: initial;
+	border-top-width: 0px;
+	border-right-color: initial;
+	border-right-style: initial;
+	border-right-width: 0px;
+	border-bottom-color: initial;
+	border-bottom-style: initial;
+	border-bottom-width: 0px;
+	border-left-color: initial;
+	border-left-style: initial;
+	border-left-width: 0px;
+	border-image-source: initial;
+	border-image-slice: initial;
+	border-image-width: initial;
+	border-image-outset: initial;
+	border-image-repeat: initial;
+	outline-color: initial;
+	outline-style: none;
+	outline-width: initial;
+	color: #fff;
+	height: 30px;
+	text-indent: 10px;
+	left: 0;
+	width: 245px;
+	font-size: 12px;
+	pointer-events: all;
+	border-bottom-left-radius: 10px;
+  font-weight: bold;
+}
+
+
+#i_emoticon {
+	position: absolute;
+	z-index: 5;
+	bottom: 0;
+	background: rgba(0,0,0,.7);
+	border: 0;
+	outline: none;
+	color: #fff;
+	height: 30px;
+	left: 245px;
+	width: 35px;
+	font-size: 16px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	pointer-events: all;
+	font-weight: 700;
+	border-bottom-right-radius:10px;
+}
+
+
+
+::-webkit-scrollbar {
+	width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 1px grey;
+	border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: #2dfa83;
+	border-radius: 5px;
+}
+
+	/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #2dfa83;
+}
+
+
+#i_container {
+    transform-origin: bottom left;
+	position: absolute;
+	z-index: 4;
+	bottom: 10px;
+	left: 10px;
+	margin: auto;
+	padding: 0;
+    
+}
+
+#leaderboard{
+  position: absolute;
+  min-width:175px;
+  z-index:999;
+  top:50px;
+  right:10px;
+  height:auto;
+  border:0px;
+  background: #777;  
+  /*font-family: "Ubuntu";*/
+  padding: 5px 10px;
+  text-align: left;
+  border-radius: 5px;
+  font-size:13px;
+  opacity: 0.8;
+}
+
+#leaderboard .leaderboard_title{
+  font-weight: bold;
+  color:#fff;
+  font-size:14px;
+  text-align: center;
+}
+
+#leaderboard .leaderboard_me{
+  color:#ff6e07;
+  font-weight: bold;
+}
+
+#leaderboard .leaderboard_client{
+  color:#fff;
+  font-weight: bold;  
+}
+
+#i_stats {
+  position: absolute;
+  top: 5px;
+  min-width:90px;
+  height: auto;
+  border-radius: 5px;
+  background-color: #777;
+  font-size:13px;
+  padding: 5px 10px;
+  color: white;
+  margin:5px 10px;
+  opacity: 0.8;
+  display:none;
+}
+
+#partytable {
+  position: absolute;
+  z-index: 1000;
+  top: 10px;
+  /*display: none;*/
+  background: #777;
+  border: 0px;
+  height: auto;
+  border-radius: 10px;
+  min-width: 130px;
+  /*font-family: "Ubuntu";*/
+  left:130px;
+  /*padding: 5px 10px;*/
+  text-align: left;
+  font-size:13px;
+  opacity: .8;
+}
+
+#partytable .party_title{
+  color:#fff;
+  text-align:center;
+  font-weight:bold;
+}
+
+#partytable .partymember_me{
+  color:#ff6e07;
+  font-weight: bold;
+}
+
+#partytable .partymember_client{
+  color:#fff;
+  font-weight: bold;  
+}
+
+.context-menu, .context-menu2, .context-menu3, .context-menu4{
+    
+    width: 120px;
+    height: auto;
+    color:#fff;
+    position: absolute;
+    display: none;
+    padding:5px;
+  }
+
+  .context-menu ul, .context-menu2 ul, .context-menu3 ul, .context-menu4 ul{
+    list-style: none;
+    padding: 3px 3px 0px 5px;
+    background-color: #444;
+    border-radius: 5px;
+    font-size:11px;
+    border:1px solid #666;
+  }
+
+  .context-menu ul li, .context-menu2 ul li, .context-menu3 ul li, .context-menu4 ul li{
+    padding: 5px 0px;
+    /*border-left: 4px solid;*/
+    cursor: pointer;
+    border-bottom: 1px solid #666;
+  }
+
+  .context-menu ul li:hover, .context-menu2 ul li:hover, .context-menu3 ul li:hover, .context-menu4 ul li:hover{
+    background:#555;
+    /*border-left: 4px solid #666;*/
+  }
+
+
+
+
+
+
+
+#footer {
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: -10px;
+}
+#play-btn {
+    width: 85%;
+    margin-bottom: 10px;
+}
+#spectate-btn {
+    width: 13%;
+    float: right;
+    top: 0;
+}
+#play-btn, #spectate-button {
+    display: inline;
+}
+#gallery-btn {
+    width: 100%;
+    margin-bottom: 5px;
+}
+#touchpad, #touchCircle, #splitBtn, #ejectBtn {
+    position: fixed;
+}
+#touchpad, #splitBtn, #ejectBtn {
+    z-index: 2;
+}
+#touchpad {
+    background: #000;
+    opacity: 0.3;
+    width: 20vw;
+    height: 20vh;
+    left: 0;
+    bottom: 0;
+}
+#touchCircle {
+    width: 4vw;
+    height: 4vw;
+    border-radius: 2vw;
+    background: #f00;
+    opacity: 0.3;
+    z-index: 3;
+}
+#splitBtn, #ejectBtn {
+    width: 8vw;
+    height: 8vw;
+    border-radius: 4vw;
+    background: #777;
+    opacity: 0.5;
+}
+#splitBtn {
+    right: 18vw;
+    bottom: 0;
+}
+#ejectBtn {
+    bottom: 18vw;
+    right: 0;
+}
+#playSounds:checked + #soundsVolume {
+    display: inline;
+}
+#soundsVolume {
+    display: none;
+    width: 100px;
+    height: 18px;
+    padding: 0; /* IE fix */
+    vertical-align: middle;
+}
+#settings label {
+    margin-right: 10px;
+    user-select: none;
+}
+
+
+
+
+
+
+
+
+
+  
+  /* Clear floats after the columns */
+  
+  section:after {
+  
+    content: "";
+  
+    display: table;
+  
+    clear: both;
+  
+  }
+  
+  
+  
+  
+  /* Responsive layout - makes the two columns/boxes stack on top of each other instead of next to each other, on small screens */
+  
+  @media (max-width: 600px) {
+  
+    nav, article {
+  
+      width: 100%;
+  
+      height: auto;
+  
+    }
+  
+  }
+
+
+
+
+  #screenshot_mask {
+
+    width: 100%;
+  
+    height: 100%;
+  
+    position: fixed;
+  
+    top: 0px;
+  
+    left: 0px;
+  
+    display: block;
+  
+    opacity: 0.3;
+  
+    text-align: center;
+  
+    box-sizing: border-box;
+  
+    z-index: 2147483647;
+  
+    border-color: black;
+  
+    border-style: solid;
+  
+  }
+  
+  #screenshot_focus:before,#screenshot_focus:after{
+  
+    border:none !important;
+  
+    content:"" !important;
+  
+    height:100% !important;
+  
+    position:absolute !important;
+  
+    width:100% !important
+  
+  }
+  
+  #screenshot_focus:before{
+  
+    border-right:1px solid white !important;
+  
+    border-bottom:1px solid white !important;
+  
+    left:-100% !important;
+  
+    top:-100% !important
+  
+  }
+  
+  #screenshot_focus:after{
+  
+    border-top:1px solid white !important;
+  
+    border-left:1px solid white !important;
+  
+    left:0 !important;
+  
+    top:0 !important
+  
+  }
+  
+  #screenshot_focus{
+  
+    height:100% !important;
+  
+    position:fixed !important;
+  
+    width:100% !important;
+  
+    z-index:2147483648 !important
+  
+  }
+  
+
+
+#i_confirm{
+    height: auto;
+    position: absolute;
+    float: left;
+    top:150px;
+    width: 200px;
+    border: 2px solid #bc933f;
+    border-radius: 5px;
+    margin: 10px;
+    display: none;
+    padding: 5px 0px;
+   text-align:center;
+   background: #777;
+   opacity: 1;
+   color:#fff;
+}
+
+#i_confirm_text{
+  text-align:left;
+  padding-left:10px;
+}
+
+#i_confirm_text .partymember_me{
+  color:#fff;
+  font-weight: bold;
+}
+
+#i_confirm_text .partymember_client{
+  color:#444;
+  font-weight: bold;  
+}
+
+#i_confirm_title{
+  padding:5px;
+  text-align:center;
+  color:#fff;
+  font-weight: bold;
+}
+
+#i_confirm_button{
+	text-align:center;
+}
+
+#i_confirm_button button{
+	margin:5px;
+  width:40%;
+}
+
+#i_experimental {
+  display: "none";
+	position: absolute;
+	top: 10px;
+	left:0px;
+	right:0px;
+	height: 30px;
+	width: 270px;
+	border-radius: 20px;
+	/*padding: 5px;*/
+	text-align: center;
+	color: white;
+	/*font-size: 14px;*/
+	background-color: #777;
+	margin: auto;
+	font-weight:bold;
+  opacity: 0.8;
+}
+
+#i_stats {
+	position: absolute;
+	top: 5px;
+  min-width:90px;
+	height: auto;
+	border-radius: 10px;
+	background-color: #777;
+	font-size:13px;
+	padding: 5px 10px;
+	color: white;
+	margin:5px 10px;
+  opacity: 0.8;
+  display:none;
+}
+
+#i_mass, #i_score, #i_fps, #i_ping{
+  line-height: 1.5em;
+  display:block;
+}

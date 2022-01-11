@@ -1,0 +1,3 @@
+serverport = 8801;
+servername = "FFA 1";
+require('./index.js');

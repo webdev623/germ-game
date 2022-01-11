@@ -1,0 +1,61 @@
+.partyTitle{
+	text-align: center;
+}
+.partyText{
+	text-align: center;
+}
+.clear{
+	display: flex;
+	justify-content: center;
+	padding-top: 10px;
+}
+.btn-party{
+	width:95px;
+}
+.btn-party.party-create{
+	margin: 0 5px 0 0;
+}
+.btn-party.party-join{
+	margin: 0 0 0 5px;
+}
+.partyExit{
+	position: absolute;
+	right:15px;
+	font-size: 20px;
+	opacity: .65;
+	cursor: pointer;
+}
+.box-glow-green{
+	box-shadow: 0 0 12px 2px #0f0
+}
+.chat-skin{
+	display: inline-block !important;
+    pointer-events: all;
+    white-space: nowrap;
+    height: 20px;
+    font-weight: bold;
+}
+.chat-server{
+	display: inline-block !important;
+    pointer-events: all;
+    white-space: nowrap;
+    height: 20px;
+    font-weight: bold;	
+}
+.skin-contextmenu{
+	position: absolute;
+    width: 20px;
+    height: 20px;
+    box-sizing: content-box;
+    border-radius: 50%;
+    background-size: contain;
+    opacity: 1;
+}
+.name-contextmenu{
+	font-size:16px;
+	font-weight: bold;
+	margin:2px 0px 0px 30px;
+}
+.context-menu, .context-menu2, .context-menu3, .context-menu4{
+    z-index: 1000;
+}
